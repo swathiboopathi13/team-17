@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Registration</title>
+    <link rel="stylesheet" href="child.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Child Registration</h1>
+        <button id="newRegBtn">New Registration</button>
+        <button id="viewBtn">View Registration</button>
+
+        <div id="registrationForm" class="hidden">
+            <h2>New Child Registration</h2>
+            <form id="childForm">
+                <input type="text" id="name" placeholder="Child's Name" required>
+                <input type="number" id="age" placeholder="Age" required>
+                <input type="text" id="gender" placeholder="Gender" required>
+                <input type="text" id="address" placeholder="Address" required>
+                <input type="text" id="guardian" placeholder="Guardian's Name" required>
+                <input type="text" id="contact" placeholder="Guardian's Contact" required>
+                <input type="text" id="bloodGroup" placeholder="Blood Group" required>
+                <input type="text" id="healthCondition" placeholder="Health Condition" required>
+                <input type="text" id="height" placeholder="Height (cm)" required>
+                <input type="text" id="weight" placeholder="Weight (kg)" required>
+                <input type="text" id="education" placeholder="Education Level" required>
+                <input type="text" id="vaccinationStatus" placeholder="Vaccination Status" required>
+                <input type="text" id="disabilities" placeholder="Disabilities (if any)" required>
+                <input type="text" id="birthCertificate" placeholder="Birth Certificate (Yes/No)" required>
+                <button type="submit" id="registerBtn">Register</button>
+            </form>
+        </div>
+
+        <table id="childTable" class="hidden" border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Address</th>
+                    <th>Guardian</th>
+                    <th>Contact</th>
+                    <th>Blood Group</th>
+                    <th>Health Condition</th>
+                    <th>Height</th>
+                    <th>Weight</th>
+                    <th>Vaccination Status</th>
+                    <th>Disabilities</th>
+                    <th>Birth Certificate</th>
+                </tr>
+            </thead>
+            <tbody id="childTableBody"></tbody>
+        </table>
+
+    </div>
+
+    <script src="child.js"></script>
+</body>
+</html>

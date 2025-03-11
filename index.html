@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Anganwadi Monitoring</title>
+    <style>
+        /* General body styling */
+        body {
+            background: url('file:///C:/Users/User/Downloads/DALL%C2%B7E%202025-02-23%2009.02.48%20-%20A%20wide%20digital%20illustration%20of%20an%20Anganwadi%20child%20undergoing%20a%20health%20checkup%20in%20an%20AI-assisted%20environment.%20The%20setting%20includes%20a%20caring%20Anganwadi%20w.webp') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        
+        /* Main container */
+        .container {
+            text-align: center;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+        
+        /* Glassmorphism effect */
+        .login-container, .signup-container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        
+        /* Input field styles */
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        
+        /* Button styles */
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #e8d3e4;
+            color: rgb(74, 14, 15);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        /* Modal Background */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Modal Content */
+        .modal-content {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+        }
+        </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Form -->
+        <div class="login-container" id="loginBox">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="text" id="loginUsername" placeholder="Username" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit">Sign In</button>
+                <p><a href="#" id="forgotPassword">Forgot Password?</a></p>
+                <p>Don't have an account? <a href="#" id="showSignUp">Sign Up</a></p>
+            </form>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div class="signup-container" id="signUpBox" style="display: none;">
+            <h2>Sign Up</h2>
+            <form id="signUpForm">
+                <input type="text" id="signUpUsername" placeholder="Username" required>
+                <input type="email" id="signUpEmail" placeholder="Email" required>
+                <input type="password" id="signUpPassword" placeholder="Password" required>
+                <button type="submit">Register</button>
+                <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Reset Password</h2>
+            <input type="email" id="resetEmail" placeholder="Enter your email" required>
+            <button id="resetButton">Reset Password</button>
+        </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div id="successPopup" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="popupMessage"></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loginForm = document.getElementById("loginForm");
+            const signUpForm = document.getElementById("signUpForm");
+
+            const loginBox = document.getElementById("loginBox");
+            const signUpBox = document.getElementById("signUpBox");
+
+            const showSignUp = document.getElementById("showSignUp");
+            const showLogin = document.getElementById("showLogin");
+
+            const forgotPasswordLink = document.getElementById("forgotPassword");
+            const forgotPasswordModal = document.getElementById("forgotPasswordModal");
+            const resetButton = document.getElementById("resetButton");
+            const closeButtons = document.querySelectorAll(".close");
+            const successPopup = document.getElementById("successPopup");
+            const popupMessage = document.getElementById("popupMessage");
+
+            function showPopup(message) {
+                popupMessage.textContent = message;
+                successPopup.style.display = "block";
+                setTimeout(() => {
+                    successPopup.style.display = "none";
+                }, 2000);
+            }
+
+            // Switch to Sign Up form
+            showSignUp.addEventListener("click", function (event) {
+                event.preventDefault();
+                loginBox.style.display = "none";
+                signUpBox.style.display = "block";
+            });
+
+            // Switch to Login form
+            showLogin.addEventListener("click", function (event) {
+                event.preventDefault();
+                signUpBox.style.display = "none";
+                loginBox.style.display = "block";
+            });
+
+            // Show Forgot Password Modal
+            forgotPasswordLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                forgotPasswordModal.style.display = "block";
+            });
+
+            // Close Modals
+            closeButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    forgotPasswordModal.style.display = "none";
+                    successPopup.style.display = "none";
+                });
+            });
+
+            // Login Functionality
+            loginForm.addEventListener("submit", async (event) => {
+                event.preventDefault();
+                const username = document.getElementById("loginUsername").value;
+                const password = document.getElementById("loginPassword").value;
+
+                try {
+                    const response = await fetch("http://localhost:5000/api/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        showPopup("Login Successful!");
+                        setTimeout(() => {
+                            window.location.href = "nextpage.html";
+                        }, 2000);
+                    } else {
+                        alert(data.message || "Login failed");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Server error. Please try again later.");
+                }
+            });
+
+            // Sign-up Functionality
+            signUpForm.addEventListener("submit", async (event) => {
+                event.preventDefault();
+                const username = document.getElementById("signUpUsername").value;
+                const email = document.getElementById("signUpEmail").value;
+                const password = document.getElementById("signUpPassword").value;
+
+                try {
+                    const response = await fetch("http://localhost:5000/api/signup", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username, email, password })
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        showPopup("Successfully Registered!");
+                    } else {
+                        alert(data.message || "Registration failed");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Server error. Please try again later.");
+                }
+            });
+
+            // Reset Password Functionality
+            resetButton.addEventListener("click", async () => {
+                const email = document.getElementById("resetEmail").value;
+
+                try {
+                    const response = await fetch("http://localhost:5000/api/reset-password", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email })
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        showPopup("Password reset link sent!");
+                    } else {
+                        alert(data.message || "Reset failed");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Server error. Please try again later.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

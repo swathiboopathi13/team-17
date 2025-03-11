@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Anganwadi Monitoring</title>
+    <style>
+        /* General Styling */
+        body {
+            background: url('https://img.freepik.com/free-vector/active-boys-girls-friends-playing-sport-activities-outdoors_1308-31903.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        
+        
+        /* Dashboard Container */
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 60%;
+            max-width: 500px;
+        }
+        
+        /* Title */
+        h2 {
+            color: #1e1818;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        /* Glassmorphism Box Container */
+        .box-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        /* Glassmorphism Effect for Boxes */
+        .box {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            width: 180px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: rgb(24, 19, 19);
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+        }
+        
+        .box:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2>Welcome to Anganwadi Monitoring</h2>
+        <div class="box-container">
+            <div class="box" id="growth-monitoring">Height & Weight Monitoring</div>
+            <div class="box" id="attendance-tracking">Attendance</div>
+            <div class="box" id="icds-engagement">ICDS Schemes</div>
+            <div class="box" id="Child Registration">Child Registration</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("growth-monitoring").addEventListener("click", function () {
+                window.location.href = "growth.html";
+            });
+
+            document.getElementById("attendance-tracking").addEventListener("click", function () {
+                window.location.href = "attendance.html";
+            });
+
+            document.getElementById("icds-engagement").addEventListener("click", function () {
+                window.location.href = "icds.html";
+            });
+            document.getElementById("Child Registration").addEventListener("click", function () {
+                window.location.href = "Child Registration.html";
+            });
+        });
+    </script>
+</body>
+</html>
+

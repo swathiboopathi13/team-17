@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Attendance</title>
+    <link rel="stylesheet" href="attendance.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- Attendance Capture Box -->
+        <div class="box">
+            <h3>Attendance Capture</h3>
+            <video id="attendance-video" autoplay></video>
+            <button id="start-attendance">Start Camera</button>
+            <button id="mark-attendance">Mark Attendance</button>
+            <p id="attendance-status"></p>
+        </div>
+
+        <!-- New Child Entry Box -->
+        <div class="box">
+            <h3>New Child Registration</h3>
+            <video id="child-video" autoplay></video>
+            <input type="text" id="child-name" placeholder="Child Name">
+            <input type="number" id="child-age" placeholder="Age">
+            <input type="text" id="child-address" placeholder="Address">
+            <button id="start-child-camera">Start Camera</button>
+            <button id="capture-child">Register Child</button>
+        </div>
+
+        <!-- View Child Details Box -->
+        <div class="box">
+            <h3>View Child Details</h3>
+            <ul id="child-list"></ul>
+        </div>
+
+    </div>
+
+    <script src="attendance.js"></script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICDS Schemes & Awareness</title>
+    <style>
+        /* General Styles */
+        body {
+            background: url('file:///C:/Users/User/Downloads/DALL%C2%B7E%202025-02-23%2009.02.48%20-%20A%20wide%20digital%20illustration%20of%20an%20Anganwadi%20child%20undergoing%20a%20health%20checkup%20in%20an%20AI-assisted%20environment.%20The%20setting%20includes%20a%20caring%20Anganwadi%20w.webp') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Container */
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Buttons */
+        button {
+            margin: 15px;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            background: rgba(255, 105, 180, 0.3);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            transition: 0.3s ease-in-out;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Button Hover Effect */
+        button:hover {
+            background: rgba(255, 105, 180, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+        }
+
+        /* Hidden Elements */
+        .hidden {
+            display: none;
+        }
+
+        /* Glassmorphism Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(246, 193, 193, 0.2);
+            backdrop-filter: blur(15px);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        /* Modal Content */
+        .modal-content {
+            text-align: center;
+        }
+
+        /* Close Button */
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close:hover {
+            color: red;
+        }
+
+        /* Chatbot Suggestions */
+        .suggestions-box {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            position: absolute;
+            width: 85%;
+            max-height: 160px;
+            overflow-y: auto;
+            border-radius: 12px;
+            padding: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+
+        /* PPT Viewer */
+        #viewerFrame {
+            width: 100%; /* Make it wider */
+            height: 400px; /* Increase height */
+            border-radius: 10px;
+            display: block;
+            margin: auto; /* Center it */
+        }
+
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>ICDS Schemes & Awareness</h2>
+        <button onclick="openModal('chatModal')">💬 Chat with Assistant</button>
+        <button onclick="toggleSchemes()">📜 View ICDS Schemes</button>
+    </div>
+
+    <!-- Chatbot Modal -->
+    <div id="chatModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('chatModal')">&times;</span>
+            <h3>💬 Chat with Assistant</h3>
+            <input type="text" id="userInput" placeholder="Ask about Anganwadi..." onkeyup="showSuggestions()">
+            <div id="suggestions" class="suggestions-box hidden"></div>
+            <button onclick="sendMessage()">Send</button>
+            <p id="chatResponse"></p>
+        </div>
+    </div>
+
+    <!-- ICDS Schemes Section -->
+    <div id="schemesContainer" class="hidden">
+        <button onclick="window.open('https://docs.google.com/presentation/d/e/2PACX-1vT_52kHF-sT7jsLgVBG0Vd7z08eM3_VZrn-GmdGto6Igsepz2JHu4Pz6swI7x5rkw/pub?start=true&loop=true&delayms=3000', '_blank')">📊 Supplementary Nutrition</button>
+        <button onclick="window.open('https://docs.google.com/presentation/d/e/2PACX-1vS754Qd0escVsuHXkJLqMW6SERskU7-1sPAJ3GJewXFJuEwclYKMFeoPxmITYXdBQ/pub?start=true&loop=true&delayms=3000')">📊 Immunization</button>
+        <button onclick="window.open('https://docs.google.com/presentation/d/e/2PACX-1vRR6zm7zyf6vAfsPK1hAQV5_-pfUaQUnPzWvR7VSe2znaimzIoWvoSdmUzf9ZDyTg/pub?start=true&loop=true&delayms=3000')">📊 Health Check-up</button>
+        <button onclick="window.open('https://docs.google.com/presentation/d/e/2PACX-1vQydH9hlqlUtaYjPjp9XwYqB601PHlr-1wHpOU5tTOTyv42SV8oBcPbi5w3Gf7dNg/pub?start=true&loop=true&delayms=3000')">📊 Referral Services</button>
+        <button onclick="window.open('https://docs.google.com/presentation/d/e/2PACX-1vRx57yi7kti5tbjc8_F4A7H9vgh3oPiv8qc5BgkUTv7tI9DRfCFBJApPSDq2-Af-g/pub?start=true&loop=true&delayms=3000')">📊 Pre-school Education</button>
+        <button onclick="window.open('https://docs.google.com/presentation/d/e/2PACX-1vQg1kK5au3gbDWT00ynGIV3DXo8BPRAFbLUPl-p0yv2MU3Gvdod8lBEVBLquclugA/pub?start=true&loop=true&delayms=3000')">📊 Nutrition & Health Education</button>
+    </div>
+
+    <!-- PPT Viewer Modal -->
+    <div id="viewerModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('viewerModal')">&times;</span>
+            <h3>📄 PPT Viewer</h3>
+            <iframe id="viewerFrame" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Open Modal
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+
+        // Close Modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        // Toggle ICDS Schemes
+        function toggleSchemes() {
+            let container = document.getElementById("schemesContainer");
+            container.classList.toggle("hidden");
+        }
+
+        // Open PPT Viewer
+        function openViewer(pptPath) {
+            document.getElementById("viewerFrame").src = pptPath;
+            openModal("viewerModal");
+        }
+
+        // Chatbot Questions
+        let responses = {
+            "hi": "Hello! How can I assist you today?",
+            "anganwadi services": "Anganwadi centers provide health checkups, nutrition, and preschool education.",
+            "malnutrition": "Malnutrition can be prevented with a balanced diet rich in vitamins, proteins, and iron.",
+            "pregnant women": "ICDS offers supplementary nutrition and health checkups for pregnant women.",
+            "child growth": "Growth monitoring includes height, weight tracking, and nutritional guidance.",
+            "nutrition": "A balanced diet with proteins, carbohydrates, and vitamins is essential for child growth.",
+            "anganwadi worker": "Anganwadi workers provide early education, health checkups, and nutrition services.",
+            "government schemes": "ICDS runs various schemes like Poshan Abhiyaan and supplementary nutrition programs.",
+            "poshan abhiyaan": "Poshan Abhiyaan is a national initiative to reduce malnutrition among children and mothers.",
+            "breastfeeding": "Exclusive breastfeeding for 6 months is recommended for newborns for better immunity.",
+            "sanitation": "Proper handwashing and clean drinking water are crucial for preventing infections.",
+            "childcare": "ICDS provides daycare and early learning for young children in rural areas.",
+            "early childhood education": "Preschool education at Anganwadi centers helps in cognitive development.",
+            "anganwadi near me": "You can find your nearest Anganwadi center by visiting the official ICDS website.",
+            "anganwadi food menu": "Anganwadi centers provide nutritious meals, including pulses, rice, vegetables, and milk.",
+            "anganwadi benefits": "Benefits include free health checkups, supplementary nutrition, preschool education, and immunization.",
+            "anganwadi helpline": "You can contact your district ICDS office for more details on Anganwadi services.",
+            "anganwadi immunization": "Anganwadi centers support vaccination programs in collaboration with health departments.",
+            "anganwadi preschool activities": "Activities like storytelling, drawing, and games help in child development at Anganwadi centers.",
+            "anganwadi campaigns": "Awareness campaigns on nutrition, hygiene, and immunization are conducted at Anganwadi centers."
+        };
+
+        // Send Chat Message
+        function sendMessage() {
+            let userText = document.getElementById("userInput").value.trim();
+            let responseText = responses[userText.toLowerCase()] || "I'm still learning! Please check with your local Anganwadi center.";
+            document.getElementById("chatResponse").innerText = responseText;
+        }
+
+        // Show Question Suggestions
+        function showSuggestions() {
+            let input = document.getElementById("userInput").value.toLowerCase();
+            let suggestionsBox = document.getElementById("suggestions");
+            suggestionsBox.innerHTML = "";
+
+            if (input.length === 0) {
+                suggestionsBox.classList.add("hidden");
+                return;
+            }
+
+            let matches = Object.keys(responses).filter(q => q.startsWith(input)).slice(0, 5);
+            if (matches.length > 0) {
+                suggestionsBox.classList.remove("hidden");
+                matches.forEach(match => {
+                    let div = document.createElement("div");
+                    div.textContent = match;
+                    div.onclick = function() {
+                        document.getElementById("userInput").value = match;
+                        suggestionsBox.classList.add("hidden");
+                    };
+                    suggestionsBox.appendChild(div);
+                });
+            } else {
+                suggestionsBox.classList.add("hidden");
+            }
+        }
+
+    </script>
+</body>
+</html>

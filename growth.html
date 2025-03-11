@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Growth Monitoring</title>
+    <style>
+        /* Background with Baby Pink Theme */
+        body {
+            background: url('https://wallpapercave.com/wp/wp4696901.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            flex-wrap: wrap;
+        }
+
+        /* Glassmorphism Effect */
+        .content-container, .tips-container {
+            background: rgba(244, 216, 108, 0.586);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(147, 106, 106, 0.1);
+            text-align: center;
+            width: 350px;
+            margin: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+        }
+
+        /* Hover effect */
+        .content-container:hover, .tips-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(147, 106, 106, 0.2);
+            background: rgb(242, 199, 60);
+        }
+
+        /* Input Fields */
+        input {
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            font-size: 16px;
+            text-align: center;
+        }
+
+        /* Button */
+        button {
+            width: 80%;
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 1);
+        }
+
+        /* Chart */
+        canvas {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        /* Tips List */
+        .tips-container ul {
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .tips-container li {
+            margin-bottom: 5px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  <!-- Chart.js for visualization -->
+</head>
+<body>
+    <div class="content-container">
+        <h2>Growth Prediction</h2>
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" placeholder="Enter height">
+        
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" placeholder="Enter weight">
+        
+        <button id="predict-btn">Predict Growth</button>
+        <p id="result"></p>
+    </div>
+
+    <div class="tips-container">
+        <h3>Nutrition Tips</h3>
+        <ul id="tips-list">
+            <li id="tip1"></li>
+            <li id="tip2"></li>
+            <li id="tip3"></li>
+            <li id="tip4"></li>
+        </ul>
+    </div>
+
+    <script>
+    document.getElementById("predict-btn").addEventListener("click", function() {
+    let height = document.getElementById("height").value;
+    let weight = document.getElementById("weight").value;
+    let resultText = document.getElementById("result");
+
+    if (height === "" || weight === "") {
+        resultText.innerText = "Please enter both height and weight!";
+        resultText.style.color = "red";
+        return;
+    }
+
+    let bmi = (weight / ((height / 100) ** 2)).toFixed(2);
+
+    fetch("http://localhost:5000/predict-growth", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ height, weight, bmi })
+    })
+    .then(response => response.json())
+    .then(data => {
+        resultText.innerText = `Predicted Growth Status: ${data.prediction} (BMI: ${bmi})`;
+        resultText.style.color = "blue";
+        updateNutritionTips(bmi);
+    })
+    .catch(error => console.error("Error fetching prediction:", error));
+});
+
+function updateNutritionTips(bmi) {
+    let tip1 = document.getElementById("tip1");
+    let tip2 = document.getElementById("tip2");
+    let tip3 = document.getElementById("tip3");
+    let tip4 = document.getElementById("tip4");
+
+    if (bmi < 18.5) {
+        tip1.innerText = "Eat more protein-rich foods like eggs, nuts, and dairy.";
+        tip2.innerText = "Increase calorie intake with healthy fats and carbs.";
+        tip3.innerText = "Consume dairy products for calcium and growth.";
+        tip4.innerText = "Exercise regularly to build muscle mass.";
+    } else if (bmi >= 18.5 && bmi < 24.9) {
+        tip1.innerText = "Maintain a balanced diet with proteins, carbs, and fats.";
+        tip2.innerText = "Eat plenty of fruits and vegetables for vitamins.";
+        tip3.innerText = "Stay hydrated and drink enough water daily.";
+        tip4.innerText = "Continue regular physical activity and healthy habits.";
+    } else if (bmi >= 25) {
+        tip1.innerText = "Reduce processed and high-sugar foods.";
+        tip2.innerText = "Increase fiber intake with whole grains and vegetables.";
+        tip3.innerText = "Engage in regular physical activity like walking or yoga.";
+        tip4.innerText = "Control portion sizes and avoid overeating.";
+    }
+}
+
+    </script>
+</body>
+</html>
