@@ -6,9 +6,11 @@ const { PythonShell } = require("python-shell");
 const { spawn } = require("child_process");
 
 
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
 
 // ========================== LOGIN SYSTEM DATABASE (anganwadi) ==========================
 const dbAnganwadi = mysql.createConnection({
@@ -58,24 +60,18 @@ db.connect(err => {
 });
 //================child==============//
 const dbchild = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "swathi",
-    database: "anganwadi_db"
+    host: 'localhost',
+    user: 'root',
+    password: 'swathi',
+    database: 'registration'
 });
 
-// ✅ Connect once when the server starts
-dbchild.connect((err) => {
+dbchild.connect(err => {
     if (err) {
-        console.error("Database Connection Failed:", err);
-        process.exit(1); // Exit if DB connection fails
+        console.error('Database Connection Failed:', err);
+        return;
     }
-    console.log("Database child Connected!");
-});
-
-// ✅ Handle MySQL Connection Errors
-dbchild.on("error", (err) => {
-    console.error("Database Error:", err);
+    console.log('Database registration Connected!');
 });
 // ========================== LOGIN MODULE ==========================
 
@@ -167,42 +163,33 @@ app.post("/predict-growth", (req, res) => {
     });
 });
 //===================child module===========//
-// Register Child API
-app.post("/api/register-child", (req, res) => {
-    const { name, age, gender, address, guardian, contact, bloodGroup, healthCondition, height, weight, education, vaccinationStatus, disabilities, birthCertificate } = req.body;
+// Register a child
+app.post('/api/register', (req, res) => {
+    const { name, parent_name, age, address } = req.body;
+    if (!name || !parent_name || !age || !address) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
 
-    const sql = `INSERT INTO child_records (name, age, gender, address, guardian, contact, bloodGroup, healthCondition, height, weight, education, vaccinationStatus, disabilities, birthCertificate) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-    dbchild.query(sql, [name, age, gender, address, guardian, contact, bloodGroup, healthCondition, height, weight, education, vaccinationStatus, disabilities, birthCertificate], (err) => {
+    const sql = "INSERT INTO child_details (name, parent_name, age, address) VALUES (?, ?, ?, ?)";
+    dbchild.query(sql, [name, parent_name, age, address], (err, result) => {
         if (err) {
-            console.error("Database Error:", err);
-            return res.status(500).json({ message: "Error storing data" });
+            console.error('Error inserting data:', err);
+            return res.status(500).json({ message: "Database Insertion Error" });
         }
-        res.json({ message: "Child registered successfully" });
+        res.json({ message: "Child Registered Successfully!" });
     });
 });
 
-// Get All Registered Children API
-app.get("/api/children", (req, res) => {
-    dbchild.query("SELECT * FROM child_records", (err, results) => {
+app.get('/api/children', (req, res) => {
+    dbchild.query("SELECT * FROM child_details", (err, result) => {
         if (err) {
-            console.error("Database Error:", err);
-            return res.status(500).json({ message: "Error fetching data" });
+            console.error("Database Fetch Error:", err);
+            return res.status(500).json({ message: "Database Fetch Error" });
         }
-        res.json(results);
+        console.log("Database Records:", result); // Debug log
+        res.json(result);
     });
 });
-// API to fetch registered users
-app.get("/get-registrations", (req, res) => {
-    const sql = "SELECT * FROM child_records";
-    db.query(sql, (err, result) => {
-      if (err) {
-        return res.status(500).json({ error: "Database query failed" });
-      }
-      res.json(result);
-    });
-  });
 
 // ========================== START SERVER ==========================
 app.listen(5000, () => {

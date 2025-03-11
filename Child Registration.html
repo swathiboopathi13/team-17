@@ -1,62 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Child Registration</title>
-    <link rel="stylesheet" href="child.css">
+    <style>
+        /* General Styles */
+    body{
+        background: url('https://png.pngtree.com/thumb_back/fh260/background/20190220/ourmid/pngtree-summer-camp-poster-child-training-expand-image_9510.jpg') no-repeat center center;
+    background-size: cover;
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;}
+
+/* Container */
+.container {
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Glassmorphism Effect */
+.glassmorphism {
+    background: rgba(81, 51, 51, 0.2);
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(15px);
+    padding: 25px;
+    width: 320px;
+    margin: 15px auto;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.6s ease-in-out forwards;
+}
+
+/* Buttons */
+button {
+    background: linear-gradient(135deg, #ff758c, #ff7eb3); /* Gradient Pink */
+    border: none;
+    padding: 12px 18px;
+    color: rgb(251, 244, 244);
+    cursor: pointer;
+    margin: 8px;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #ff5e78, #ff3d6b);
+    transform: scale(1.05);
+}
+
+/* Input Fields */
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.4);
+    transition: 0.3s ease-in-out;
+    font-size: 14px;
+}
+
+input:focus {
+    background: rgba(255, 255, 255, 0.7);
+    transform: scale(1.02);
+}
+
+/* Hidden Elements */
+.hidden {
+    display: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Child Registration</h1>
-        <button id="newRegBtn">New Registration</button>
-        <button id="viewBtn">View Registration</button>
 
-        <div id="registrationForm" class="hidden">
-            <h2>New Child Registration</h2>
-            <form id="childForm">
-                <input type="text" id="name" placeholder="Child's Name" required>
-                <input type="number" id="age" placeholder="Age" required>
-                <input type="text" id="gender" placeholder="Gender" required>
-                <input type="text" id="address" placeholder="Address" required>
-                <input type="text" id="guardian" placeholder="Guardian's Name" required>
-                <input type="text" id="contact" placeholder="Guardian's Contact" required>
-                <input type="text" id="bloodGroup" placeholder="Blood Group" required>
-                <input type="text" id="healthCondition" placeholder="Health Condition" required>
-                <input type="text" id="height" placeholder="Height (cm)" required>
-                <input type="text" id="weight" placeholder="Weight (kg)" required>
-                <input type="text" id="education" placeholder="Education Level" required>
-                <input type="text" id="vaccinationStatus" placeholder="Vaccination Status" required>
-                <input type="text" id="disabilities" placeholder="Disabilities (if any)" required>
-                <input type="text" id="birthCertificate" placeholder="Birth Certificate (Yes/No)" required>
-                <button type="submit" id="registerBtn">Register</button>
+    <div class="container">
+        <button onclick="showNewRegistration()">New Registration</button>
+        <button onclick="viewRegistrations()">View Registration</button>
+
+        <div id="newRegistration" class="glassmorphism hidden">
+            <h3>Child Registration</h3>
+            <form id="registrationForm">
+                <input type="text" id="name" placeholder="Child's Name" required><br>
+                <input type="text" id="parent_name" placeholder="Parent's Name" required><br>
+                <input type="number" id="age" placeholder="Age" required><br>
+                <input type="text" id="address" placeholder="Address" required><br>
+                <button type="button" onclick="submitForm()">Register</button>
             </form>
         </div>
 
-        <table id="childTable" class="hidden" border="1">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Age</th>
-                    <th>Gender</th>
-                    <th>Address</th>
-                    <th>Guardian</th>
-                    <th>Contact</th>
-                    <th>Blood Group</th>
-                    <th>Health Condition</th>
-                    <th>Height</th>
-                    <th>Weight</th>
-                    <th>Vaccination Status</th>
-                    <th>Disabilities</th>
-                    <th>Birth Certificate</th>
-                </tr>
-            </thead>
-            <tbody id="childTableBody"></tbody>
-        </table>
-
+        <div id="viewRegistration" class="glassmorphism hidden">
+            <h3>Registered Children</h3>
+            <div id="childList"></div>
+        </div>
     </div>
 
-    <script src="child.js"></script>
+    <script>
+        function showNewRegistration() {
+            document.getElementById('newRegistration').classList.remove('hidden');
+            document.getElementById('viewRegistration').classList.add('hidden');
+        }
+
+        function viewRegistrations() {
+    fetch('http://localhost:5000/api/children') // Ensure this is correct
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Fetched Data:", data); // Debug log
+            let output = "";
+            if (data.length === 0) {
+                output = "<p>No children registered yet.</p>";
+            } else {
+                data.forEach(child => {
+                    output += `<p><strong>${child.name}</strong> (Parent: ${child.parent_name}), Age: ${child.age}, Address: ${child.address}</p>`;
+                });
+            }
+            document.getElementById('childList').innerHTML = output;
+            document.getElementById('viewRegistration').classList.remove('hidden');
+            document.getElementById('newRegistration').classList.add('hidden');
+        })
+        .catch(error => {
+            console.error("Fetch Error:", error);
+            alert("Error fetching registrations. Check console.");
+        });
+}
+
+
+        function submitForm() {
+            const data = {
+                name: document.getElementById("name").value,
+                parent_name: document.getElementById("parent_name").value,
+                age: document.getElementById("age").value,
+                address: document.getElementById("address").value
+            };
+
+            fetch('http://localhost:5000/api/register', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                document.getElementById("registrationForm").reset();
+                document.getElementById("newRegistration").classList.add("hidden");
+            })
+            .catch(error => console.error("Fetch Error:", error));
+        }
+    </script>
+
 </body>
 </html>
