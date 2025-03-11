@@ -113,10 +113,9 @@ app.post("/api/login", (req, res) => {
 });
 
 // ========================== GROWTH MONITORING MODULE ==========================
-
 // Store growth data with BMI
 app.post("/store-growth", (req, res) => {
-    console.log("Received Data:", req.body); // Log the incoming data
+    console.log("Received Data:", req.body);
 
     const { height, weight, bmi } = req.body;
     if (!height || !weight || !bmi) {
@@ -124,11 +123,10 @@ app.post("/store-growth", (req, res) => {
     }
 
     const sql = "INSERT INTO growth_data (height, weight, bmi) VALUES (?, ?, ?)";
-
-    db.query(sql, [height, weight, bmi], (err, result) => {
+    dbGrowth.query(sql, [height, weight, bmi], (err, result) => {
         if (err) {
-            console.error("SQL Error: ", err.sqlMessage);
-            return res.status(500).json({ message: "Error storing data", error: err.sqlMessage });
+            console.error("SQL Error: ", err.message);
+            return res.status(500).json({ message: "Error storing data", error: err.message });
         }
         console.log("Data inserted successfully:", result);
         res.json({ message: "Data stored successfully" });
@@ -138,12 +136,11 @@ app.post("/store-growth", (req, res) => {
 // Predict growth using ML model
 app.post("/predict-growth", (req, res) => {
     const { height, weight } = req.body;
-
     console.log("Spawning Python process for growth prediction...");
 
     const pythonProcess = spawn("python", ["predict_growth.py", height, weight]);
 
-    let predictionOutput = ""; // Store output
+    let predictionOutput = "";
 
     pythonProcess.stdout.on("data", data => {
         predictionOutput += data.toString();
@@ -162,6 +159,7 @@ app.post("/predict-growth", (req, res) => {
         }
     });
 });
+
 //===================child module===========//
 // Register a child
 app.post('/api/register', (req, res) => {
