@@ -132,7 +132,7 @@ input:focus {
                 output = "<p>No children registered yet.</p>";
             } else {
                 data.forEach(child => {
-                    output += `<p><strong>${child.name}</strong> (Parent: ${child.parent_name}), Age: ${child.age}, Address: ${child.address}</p>`;
+                    output += <p><strong>${child.name}</strong> (Parent: ${child.parent_name}), Age: ${child.age}, Address: ${child.address}</p>;
                 });
             }
             document.getElementById('childList').innerHTML = output;
