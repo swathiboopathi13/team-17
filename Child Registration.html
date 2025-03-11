@@ -4,88 +4,89 @@
     <title>Child Registration</title>
     <style>
         /* General Styles */
-    body{
-        background: url('https://png.pngtree.com/thumb_back/fh260/background/20190220/ourmid/pngtree-summer-camp-poster-child-training-expand-image_9510.jpg') no-repeat center center;
-    background-size: cover;
-    background-attachment: fixed; /* Keeps the image fixed while scrolling */
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: Arial, sans-serif;}
+        body {
+            background: url('https://png.pngtree.com/thumb_back/fh260/background/20190220/ourmid/pngtree-summer-camp-poster-child-training-expand-image_9510.jpg') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
 
-/* Container */
-.container {
-    text-align: center;
-    animation: fadeIn 1s ease-in-out;
-}
+        /* Container */
+        .container {
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
 
-/* Glassmorphism Effect */
-.glassmorphism {
-    background: rgba(81, 51, 51, 0.2);
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(15px);
-    padding: 25px;
-    width: 320px;
-    margin: 15px auto;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: slideUp 0.6s ease-in-out forwards;
-}
+        /* Glassmorphism Effect */
+        .glassmorphism {
+            background: rgba(81, 51, 51, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 25px;
+            width: 320px;
+            margin: 15px auto;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.6s ease-in-out forwards;
+        }
 
-/* Buttons */
-button {
-    background: linear-gradient(135deg, #ff758c, #ff7eb3); /* Gradient Pink */
-    border: none;
-    padding: 12px 18px;
-    color: rgb(251, 244, 244);
-    cursor: pointer;
-    margin: 8px;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: all 0.3s ease-in-out;
-}
+        /* Buttons */
+        button {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            border: none;
+            padding: 12px 18px;
+            color: rgb(251, 244, 244);
+            cursor: pointer;
+            margin: 8px;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease-in-out;
+        }
 
-button:hover {
-    background: linear-gradient(135deg, #ff5e78, #ff3d6b);
-    transform: scale(1.05);
-}
+        button:hover {
+            background: linear-gradient(135deg, #ff5e78, #ff3d6b);
+            transform: scale(1.05);
+        }
 
-/* Input Fields */
-input {
-    width: 90%;
-    padding: 10px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 8px;
-    outline: none;
-    background: rgba(255, 255, 255, 0.4);
-    transition: 0.3s ease-in-out;
-    font-size: 14px;
-}
+        /* Input Fields */
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.4);
+            transition: 0.3s ease-in-out;
+            font-size: 14px;
+        }
 
-input:focus {
-    background: rgba(255, 255, 255, 0.7);
-    transform: scale(1.02);
-}
+        input:focus {
+            background: rgba(255, 255, 255, 0.7);
+            transform: scale(1.02);
+        }
 
-/* Hidden Elements */
-.hidden {
-    display: none;
-}
+        /* Hidden Elements */
+        .hidden {
+            display: none;
+        }
 
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -118,33 +119,32 @@ input:focus {
         }
 
         function viewRegistrations() {
-    fetch('http://localhost:5000/api/children') // Ensure this is correct
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Fetched Data:", data); // Debug log
-            let output = "";
-            if (data.length === 0) {
-                output = "<p>No children registered yet.</p>";
-            } else {
-                data.forEach(child => {
-                    output += <p><strong>${child.name}</strong> (Parent: ${child.parent_name}), Age: ${child.age}, Address: ${child.address}</p>;
+            fetch('http://localhost:5000/api/children') // Ensure backend is running on port 5000
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Fetched Data:", data); // Debugging
+                    let output = "";
+                    if (data.length === 0) {
+                        output = "<p>No children registered yet.</p>";
+                    } else {
+                        data.forEach(child => {
+                            output += `<p><strong>${child.name}</strong> (Parent: ${child.parent_name}), Age: ${child.age}, Address: ${child.address}</p>`;
+                        });
+                    }
+                    document.getElementById('childList').innerHTML = output;
+                    document.getElementById('viewRegistration').classList.remove('hidden');
+                    document.getElementById('newRegistration').classList.add('hidden');
+                })
+                .catch(error => {
+                    console.error("Fetch Error:", error);
+                    alert("Error fetching registrations. Check console.");
                 });
-            }
-            document.getElementById('childList').innerHTML = output;
-            document.getElementById('viewRegistration').classList.remove('hidden');
-            document.getElementById('newRegistration').classList.add('hidden');
-        })
-        .catch(error => {
-            console.error("Fetch Error:", error);
-            alert("Error fetching registrations. Check console.");
-        });
-}
-
+        }
 
         function submitForm() {
             const data = {
