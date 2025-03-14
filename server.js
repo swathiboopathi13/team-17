@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const { PythonShell } = require("python-shell");
 const { spawn } = require("child_process");
+const fs = require('fs');
+const path = require('path');
 
 
 
@@ -11,6 +13,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
+app.use(bodyParser.json({ limit: '10mb' }));
 
 // ========================== LOGIN SYSTEM DATABASE (anganwadi) ==========================
 const dbAnganwadi = mysql.createConnection({
@@ -73,6 +76,19 @@ dbchild.connect(err => {
     }
     console.log('Database registration Connected!');
 });
+//==========================face==============//
+const dbface = mysql.createConnection({  // Changed dbchild to dbface
+    host: 'localhost',
+    user: 'root',
+    password: 'swathi',
+    database: 'attendance_db'  // Database name remains dbface
+});
+
+dbface.connect(err => {
+    if (err) throw err;
+    console.log("Database Connected!");
+});
+
 // ========================== LOGIN MODULE ==========================
 
 // Signup API (Without bcrypt)
@@ -188,7 +204,31 @@ app.get('/api/children', (req, res) => {
         res.json(result);
     });
 });
+//====================face module===================================//
+// Handle Image Upload & Face Recognition
+app.post('/upload', (req, res) => {
+    const imageData = req.body.image.replace(/^data:image\/jpeg;base64,/, "");
+    const imagePath = `uploads/${Date.now()}.jpg`;
 
+    fs.writeFile(imagePath, imageData, 'base64', (err) => {
+        if (err) return res.json({ success: false });
+
+        // Call Python DeepFace script
+        const pythonProcess = spawn('python3', ['face_recognition.py', imagePath]);
+
+        pythonProcess.stdout.on('data', (data) => {
+            const result = data.toString().trim();
+            if (result !== "Unknown") {
+                dbface.query("INSERT INTO attendance (name, timestamp) VALUES (?, NOW())", [result], (err) => {
+                    if (err) return res.json({ success: false });
+                    res.json({ success: true, name: result });
+                });
+            } else {
+                res.json({ success: false });
+            }
+        });
+    });
+});
 // ========================== START SERVER ==========================
 app.listen(5000, () => {
     console.log("Server running on port 5000");

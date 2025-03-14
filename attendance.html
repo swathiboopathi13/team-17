@@ -3,41 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Face Recognition Attendance</title>
-    <link rel="stylesheet" href="attendance.css">
+    <title>Attendance Monitoring</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        video { border: 2px solid black; width: 60%; }
+        #capture-btn { margin: 10px; padding: 10px; background: pink; border: none; cursor: pointer; }
+        #notification { display: none; background: lightgreen; padding: 10px; margin-top: 10px; }
+    </style>
 </head>
 <body>
 
-    <div class="container">
+    <h1>Attendance Monitoring</h1>
+    <video id="video" autoplay></video>
+    <button id="capture-btn">Capture & Mark Attendance</button>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <div id="notification">Attendance Marked Successfully!</div>
 
-        <!-- Attendance Capture Box -->
-        <div class="box">
-            <h3>Attendance Capture</h3>
-            <video id="attendance-video" autoplay></video>
-            <button id="start-attendance">Start Camera</button>
-            <button id="mark-attendance">Mark Attendance</button>
-            <p id="attendance-status"></p>
-        </div>
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureBtn = document.getElementById('capture-btn');
+        const notification = document.getElementById('notification');
 
-        <!-- New Child Entry Box -->
-        <div class="box">
-            <h3>New Child Registration</h3>
-            <video id="child-video" autoplay></video>
-            <input type="text" id="child-name" placeholder="Child Name">
-            <input type="number" id="child-age" placeholder="Age">
-            <input type="text" id="child-address" placeholder="Address">
-            <button id="start-child-camera">Start Camera</button>
-            <button id="capture-child">Register Child</button>
-        </div>
+        // Access webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => video.srcObject = stream)
+            .catch(err => console.error("Error accessing webcam:", err));
 
-        <!-- View Child Details Box -->
-        <div class="box">
-            <h3>View Child Details</h3>
-            <ul id="child-list"></ul>
-        </div>
+        // Capture Image
+        captureBtn.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            const imageData = canvas.toDataURL('image/jpeg');
 
-    </div>
+            // Send captured image to backend
+            fetch('/upload', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ image: imageData })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    notification.textContent = `Attendance Marked for ${data.name}!`;
+                    notification.style.display = "block";
+                    setTimeout(() => notification.style.display = "none", 3000);
+                } else {
+                    alert("Attendance marking failed!");
+                }
+            })
+            .catch(err => console.error("Error:", err));
+        });
+    </script>
 
-    <script src="attendance.js"></script>
 </body>
 </html>
