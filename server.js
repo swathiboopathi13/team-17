@@ -177,33 +177,22 @@ app.post("/predict-growth", (req, res) => {
 });
 
 //===================child module===========//
-// Register a child
-app.post('/api/register', (req, res) => {
-    const { name, parent_name, age, address } = req.body;
-    if (!name || !parent_name || !age || !address) {
-        return res.status(400).json({ message: "All fields are required" });
-    }
-
-    const sql = "INSERT INTO child_details (name, parent_name, age, address) VALUES (?, ?, ?, ?)";
-    dbchild.query(sql, [name, parent_name, age, address], (err, result) => {
-        if (err) {
-            console.error('Error inserting data:', err);
-            return res.status(500).json({ message: "Database Insertion Error" });
-        }
-        res.json({ message: "Child Registered Successfully!" });
+app.post("/registerChild", (req, res) => {
+    const { name, age, dob, gender, bloodGroup, fatherName, motherName, phone, address } = req.body;
+    const sql = "INSERT INTO child_register (name, age, dob, gender, bloodGroup, fatherName, motherName, phone, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    dbchild.query(sql, [name, age, dob, gender, bloodGroup, fatherName, motherName, phone, address], (err, result) => {
+        if (err) throw err;
+        res.json({ message: "Child registered successfully!" });
     });
 });
 
-app.get('/api/children', (req, res) => {
-    dbchild.query("SELECT * FROM child_details", (err, result) => {
-        if (err) {
-            console.error("Database Fetch Error:", err);
-            return res.status(500).json({ message: "Database Fetch Error" });
-        }
-        console.log("Database Records:", result); // Debug log
-        res.json(result);
+app.get("/getChildren", (req, res) => {
+    dbchild.query("SELECT * FROM child_register", (err, results) => {
+        if (err) throw err;
+        res.json(results);
     });
 });
+
 //====================face module===================================//
 // Handle Image Upload & Face Recognition
 app.post('/upload', (req, res) => {
