@@ -3,61 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance Monitoring</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        video { border: 2px solid black; width: 60%; }
-        #capture-btn { margin: 10px; padding: 10px; background: pink; border: none; cursor: pointer; }
-        #notification { display: none; background: lightgreen; padding: 10px; margin-top: 10px; }
-    </style>
+    <title>Attendance Marking</title>
+    <link rel="stylesheet" href="attendance.css">
 </head>
 <body>
+    <h1>Attendance Marking System</h1>
+    <div class="carousel-container">
+        <button id="prevBtn">&#10094;</button>
+        <div class="carousel">
+            <div id="imageContainer"></div>
+        </div>
+        <button id="nextBtn">&#10095;</button>
+    </div>
+    
+    <h2>Present List</h2>
+    <div id="presentList"></div>
 
-    <h1>Attendance Monitoring</h1>
-    <video id="video" autoplay></video>
-    <button id="capture-btn">Capture & Mark Attendance</button>
-    <canvas id="canvas" style="display:none;"></canvas>
-    <div id="notification">Attendance Marked Successfully!</div>
+    <h2>Absent List</h2>
+    <div id="absentList"></div>
 
-    <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const captureBtn = document.getElementById('capture-btn');
-        const notification = document.getElementById('notification');
-
-        // Access webcam
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => video.srcObject = stream)
-            .catch(err => console.error("Error accessing webcam:", err));
-
-        // Capture Image
-        captureBtn.addEventListener('click', () => {
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            const imageData = canvas.toDataURL('image/jpeg');
-
-            // Send captured image to backend
-            fetch('/upload', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ image: imageData })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    notification.textContent = `Attendance Marked for ${data.name}!`;
-                    notification.style.display = "block";
-                    setTimeout(() => notification.style.display = "none", 3000);
-                } else {
-                    alert("Attendance marking failed!");
-                }
-            })
-            .catch(err => console.error("Error:", err));
-        });
-    </script>
-
+    <script src="attendance.js"></script>
 </body>
 </html>
