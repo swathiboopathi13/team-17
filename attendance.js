@@ -1,73 +1,68 @@
-// Select elements
-const attendanceVideo = document.getElementById("attendance-video");
-const childVideo = document.getElementById("child-video");
-const attendanceStatus = document.getElementById("attendance-status");
-const childList = document.getElementById("child-list");
+const images = [
+    { id: 1, name: "John", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtLZs1Q8tDiMlf0bx03pRzTKpz8ekwap9m7A&s" },
+    { id: 2, name: "Joe", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4CpRFl_o1Ze3m4V6cbYTr763tPBP47LDUHw&s" },
+    { id: 3, name: "Grey", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSkg4GTTqmrEhQTDUqj6QW2BoqNBOUxHmWhg&s" },
+    { id: 4, name: "Emma", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhdNYszWqNSoUjNwQ3RVGpJq-IA8HVEcXDbw&s" },
+    { id: 5, name: "Noah", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJdCCltvH_TAjByrcuDKHLs2PGiVPOgnnq5A&s" },
+    { id: 6, name: "Ava", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoEV8gtK1h08xWMdSiIJ_Cbv8n_yfLT7WsFA&s" },
+    { id: 7, name: "Liam", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1-PLT11JwQ24jXtRfbwG9BIdR9HDrvHsDAg&s" },
+    { id: 8, name: "Sophia", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSblA4BSdxc7CgnmZZu-172Ouj1DneQwaC6UA&s" },
+    { id: 9, name: "Lucas", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7Sx1nCSqexdRuCweqKDjUbo-bTHPetzL-nQ&s" },
+    { id: 10, name: "Mia", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb1vCE_LbDl0UPMUnd9z_IC-Fo7v_TjK-yGw&s" },
+    { id: 11, name: "Ethan", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREwS9weEItXYKJ9l9k9IyNhkK6jwRzb50hog&s" },
+    { id: 12, name: "Isabella", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScXApWwKrvi6nZCdzHg4u8-XnznCCeyU67rQ&s" },
+    { id: 13, name: "Mason", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQznWbI7poxaFz7686cAVNPcz1r_867ZcQU0Q&s" },
+    { id: 14, name: "Oliver", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTG2uYDm3yhQr-Zjy6tR5vT65En0BGdFDZLww&s" },
+    { id: 15, name: "Ella", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1uVvMmr33oOCduEqggjoC81yDuAr9v7cUHQ&s" },
+    { id: 16, name: "Elijah", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDoYKyokfeL48EvN09rzMR852CnapkWPDvaQ&s" },
+    { id: 17, name: "Charlotte", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoEV8gtK1h08xWMdSiIJ_Cbv8n_yfLT7WsFA&s" },
+    { id: 18, name: "James", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkFfliQuXn6CehPhxS_sov5ReaHqMm9m2PPw&s" },
+    { id: 19, name: "Amelia", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2SLUjT9AbxI42cAgewhr1m2_3C1-mM9nHVw&s" },
+    { id: 20, name: "Benjamin", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxJ4Gis4iO7EW2WFitJMTJW9ICaiJOjV4pqg&s" }
+];
 
-// Store registered children (Mock database)
-let registeredChildren = JSON.parse(localStorage.getItem("children")) || [];
+let currentIndex = 0;
+const imageContainer = document.getElementById("imageContainer");
+const presentList = document.getElementById("presentList");
+const absentList = document.getElementById("absentList");
 
-// Open Camera Function
-function openCamera(videoElement) {
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            videoElement.srcObject = stream;
-            videoElement.style.display = "block";
-        })
-        .catch(error => console.error("Error accessing webcam:", error));
+function showImage(index) {
+    imageContainer.innerHTML = `
+        <img src="${images[index].src}" alt="${images[index].name}">
+        <h3>${images[index].name}</h3>
+        <button onclick="markAttendance(${index}, 'Present')">Present</button>
+        <button onclick="markAttendance(${index}, 'Absent')">Absent</button>
+    `;
 }
 
-// Attendance Camera Start
-document.getElementById("start-attendance").addEventListener("click", () => {
-    openCamera(attendanceVideo);
-});
+function markAttendance(index, status) {
+    const child = images[index];
 
-// New Child Camera Start
-document.getElementById("start-child-camera").addEventListener("click", () => {
-    openCamera(childVideo);
-});
-
-// Capture and Register Child
-document.getElementById("capture-child").addEventListener("click", () => {
-    const name = document.getElementById("child-name").value;
-    const age = document.getElementById("child-age").value;
-    const address = document.getElementById("child-address").value;
-
-    if (!name || !age || !address) {
-        alert("Please fill all fields!");
-        return;
-    }
-
-    // Mock face registration (In actual implementation, store image and process face embedding)
-    let newChild = { name, age, address, image: "mock_image_data" };
-    registeredChildren.push(newChild);
-    localStorage.setItem("children", JSON.stringify(registeredChildren));
-
-    alert(`${name} Registered Successfully!`);
-    updateChildList();
-});
-
-// Update Child List in View Details
-function updateChildList() {
-    childList.innerHTML = "";
-    registeredChildren.forEach(child => {
-        let li = document.createElement("li");
-        li.textContent = `${child.name} (Age: ${child.age}) - ${child.address}`;
-        childList.appendChild(li);
+    fetch("/mark-attendance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: child.id, name: child.name, status, image: child.src })
     });
+
+    const card = document.createElement("div");
+    card.classList.add("child-card");
+    card.innerHTML = `<img src="${child.src}"><p>${child.name}</p>`;
+
+    if (status === "Present") {
+        presentList.appendChild(card);
+    } else {
+        absentList.appendChild(card);
+    }
 }
 
-// Mark Attendance (Mock Face Recognition)
-document.getElementById("mark-attendance").addEventListener("click", () => {
-    let detectedFace = "mock_image_data"; // Replace with actual face recognition logic
-
-    let matchedChild = registeredChildren.find(child => child.image === detectedFace);
-    if (matchedChild) {
-        attendanceStatus.textContent = `Attendance Marked for ${matchedChild.name}`;
-    } else {
-        attendanceStatus.textContent = "Face Not Recognized!";
-    }
+document.getElementById("prevBtn").addEventListener("click", () => {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    showImage(currentIndex);
 });
 
-// Load registered children on page load
-updateChildList();
+document.getElementById("nextBtn").addEventListener("click", () => {
+    currentIndex = (currentIndex + 1) % images.length;
+    showImage(currentIndex);
+});
+
+showImage(currentIndex);

@@ -61,7 +61,7 @@ db.connect(err => {
         console.log("Connected to icds database");
     }
 });
-//================child==============//
+//================childreg==============//
 const dbchild = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -86,7 +86,7 @@ const dbface = mysql.createConnection({  // Changed dbchild to dbface
 
 dbface.connect(err => {
     if (err) throw err;
-    console.log("Database Connected!");
+    console.log("Database face Connected!");
 });
 
 // ========================== LOGIN MODULE ==========================
@@ -194,30 +194,23 @@ app.get("/getChildren", (req, res) => {
 });
 
 //====================face module===================================//
-// Handle Image Upload & Face Recognition
-app.post('/upload', (req, res) => {
-    const imageData = req.body.image.replace(/^data:image\/jpeg;base64,/, "");
-    const imagePath = `uploads/${Date.now()}.jpg`;
-
-    fs.writeFile(imagePath, imageData, 'base64', (err) => {
-        if (err) return res.json({ success: false });
-
-        // Call Python DeepFace script
-        const pythonProcess = spawn('python3', ['face_recognition.py', imagePath]);
-
-        pythonProcess.stdout.on('data', (data) => {
-            const result = data.toString().trim();
-            if (result !== "Unknown") {
-                dbface.query("INSERT INTO attendance (name, timestamp) VALUES (?, NOW())", [result], (err) => {
-                    if (err) return res.json({ success: false });
-                    res.json({ success: true, name: result });
-                });
-            } else {
-                res.json({ success: false });
-            }
-        });
+app.post("/mark-attendance", (req, res) => {
+    const { id, name, status, image } = req.body;
+    const sql = "INSERT INTO childface (child_id, name, status, image) VALUES (?, ?, ?, ?)";
+    dbface.query(sql, [id, name, status, image], err => {
+        if (err) throw err;
+        res.send("Attendance Marked");
     });
 });
+
+app.get("/get-list", (req, res) => {
+    const sql = "SELECT * FROM childface";
+    dbface.query(sql, (err, results) => {
+        if (err) throw err;
+        res.json(results);
+    });
+});
+
 // ========================== START SERVER ==========================
 app.listen(5000, () => {
     console.log("Server running on port 5000");
