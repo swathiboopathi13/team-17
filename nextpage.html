@@ -3,97 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Anganwadi Monitoring</title>
+    <title>Anganwadi Monitoring Dashboard</title>
     <style>
-        /* General Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: url('https://img.freepik.com/free-vector/active-boys-girls-friends-playing-sport-activities-outdoors_1308-31903.jpg') no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            background: #eccbd2;
+            text-align: center;
+            padding-bottom: 60px;
         }
-        
-        
-        /* Dashboard Container */
-        .dashboard-container {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 60%;
-            max-width: 500px;
-        }
-        
-        /* Title */
-        h2 {
-            color: #1e1818;
+
+        .header {
+            width: 100%;
+            background: #f64e4e;
+            color: #fff;
+            padding: 20px;
             font-size: 24px;
-            margin-bottom: 20px;
+            font-weight: bold;
         }
-        
-        /* Glassmorphism Box Container */
+
+        .dashboard-container, .info-section, .stats-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1000px;
+            margin: 20px auto;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
         .box-container {
-            display: flex;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
             margin-top: 20px;
         }
-        
-        /* Glassmorphism Effect for Boxes */
+
         .box {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
+            background: #f0f0f0;
             padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            width: 180px;
-            text-align: center;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .box img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .box:hover {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .info-section img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .stats-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 15px;
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
             font-size: 16px;
             font-weight: bold;
-            color: rgb(24, 19, 19);
+            width: 220px;
+            text-align: center;
+            border: 1px solid #ccc;
             cursor: pointer;
-            transition: transform 0.3s, background 0.3s;
+            transition: all 0.3s;
         }
-        
-        .box:hover {
-            transform: scale(1.1);
-            background: rgba(255, 255, 255, 0.4);
+
+        .stat-box:hover {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .stat-box img {
+            width: 50px;
+            height: 50px;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .popup button {
+            margin-top: 10px;
+            padding: 8px 12px;
+            border: none;
+            background: #dc3545;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .popup button:hover {
+            background: #b52b3c;
+        }
+
+        @media (max-width: 600px) {
+            .box-container {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
+
+    <div class="header">Anganwadi Monitoring Dashboard</div>
+
     <div class="dashboard-container">
-        <h2>Welcome to Anganwadi Monitoring</h2>
+        <h2>System Modules</h2>
         <div class="box-container">
-            <div class="box" id="growth-monitoring">Height & Weight Monitoring</div>
-            <div class="box" id="attendance-tracking">Attendance</div>
-            <div class="box" id="icds-engagement">ICDS Schemes</div>
-            <div class="box" id="Child Registration">Child Registration</div>
+            <div class="box" id="growth-monitoring">
+                <img src="https://cdn-icons-png.flaticon.com/512/2913/2913527.png" alt="Growth">
+                Height & Weight Monitoring
+            </div>
+            <div class="box" id="attendance-tracking">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" alt="Attendance">
+                Attendance
+            </div>
+            <div class="box" id="icds-engagement">
+                <img src="https://cdn-icons-png.flaticon.com/512/2942/2942861.png" alt="ICDS">
+                ICDS Schemes
+            </div>
+            <div class="box" id="child-registration">
+                <img src="https://cdn-icons-png.flaticon.com/512/1948/1948651.png" alt="Child Registration">
+                Child Registration
+            </div>
         </div>
     </div>
 
+    <div class="info-section">
+        <h2>About Anganwadi</h2>
+        <p>Anganwadi centers provide essential services for early childhood care, health, and nutrition.</p>
+    </div>
+
+    <div class="stats-container">
+        <h2>Anganwadi Key Statistics</h2>
+        <div class="stats-grid">
+            <div class="stat-box" onclick="showPopup('5 Million+ children enrolled under ICDS schemes. \nGovernment provides free immunization, health check-ups, and supplementary nutrition.')">
+                <img src="https://cdn-icons-png.flaticon.com/512/2497/2497862.png" alt="Children">
+                5 Million+ Children Enrolled
+            </div>
+            <div class="stat-box" onclick="showPopup('95% of children receive free health check-ups through Anganwadi Centers. \nServices include vaccination, deworming, and nutritional supplements.')">
+                <img src="https://cdn-icons-png.flaticon.com/512/3209/3209995.png" alt="Health">
+                95% Health Checkups Completed
+            </div>
+            <div class="stat-box" onclick="showPopup('80% of malnourished children receive government-funded nutritional support. \nSpecial focus is given to pregnant women and lactating mothers.')">
+                <img src="https://cdn-icons-png.flaticon.com/512/3721/3721765.png" alt="Nutrition">
+                80% Nutritional Support Provided
+            </div>
+            <div class="stat-box" onclick="showPopup('Anganwadi centers provide pre-school education to 3-6 year olds. \nGovernment aims to increase literacy rates through these early education programs.')">
+                <img src="https://cdn-icons-png.flaticon.com/512/201/201623.png" alt="Education">
+                Early Education Programs
+            </div>
+        </div>
+    </div>
+
+    <div id="popup" class="popup">
+        <p id="popup-text"></p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("growth-monitoring").addEventListener("click", function () {
-                window.location.href = "growth.html";
-            });
+        function showPopup(text) {
+            document.getElementById("popup-text").innerText = text;
+            document.getElementById("popup").style.display = "block";
+        }
 
-            document.getElementById("attendance-tracking").addEventListener("click", function () {
-                window.location.href = "attendance.html";
-            });
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
 
-            document.getElementById("icds-engagement").addEventListener("click", function () {
-                window.location.href = "icds.html";
-            });
-            document.getElementById("Child Registration").addEventListener("click", function () {
-                window.location.href = "Child Registration.html";
-            });
-        });
+        document.getElementById("growth-monitoring").onclick = () => window.location.href = "growth.html";
+        document.getElementById("attendance-tracking").onclick = () => window.location.href = "attendance.html";
+        document.getElementById("icds-engagement").onclick = () => window.location.href = "icds.html";
+        document.getElementById("child-registration").onclick = () => window.location.href = "Child Registration.html";
     </script>
+
 </body>
 </html>
-
