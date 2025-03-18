@@ -1,7 +1,9 @@
 body {
-    font-family: Arial, sans-serif;
-    background: #f8d7da;
+    font-family: 'Poppins', sans-serif;
+    background: url('https://media.istockphoto.com/id/1315221886/photo/pink-pale-millennial-grunge-marble-texture-abstract-putty-concrete-background-rose-gold.jpg?s=612x612&w=0&k=20&c=9y5HOKZlNPRS2rlWr-Jp4uJOu1wH1rPROP-6gkDuh5Y=') no-repeat center center fixed;
+    background-size: cover;
     text-align: center;
+    padding-bottom: 60px;
 }
 
 .buttons {
