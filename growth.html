@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Growth Monitoring</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
             background: url('https://media.istockphoto.com/id/1184859119/photo/beautiful-ethereal-special-occasion-multicoloured-background.jpg?s=612x612&w=0&k=20&c=eoa0ZjMj5dq0JR2X3y_ZpK--qLf_qXr0K4pfl08_iPc=') no-repeat center center fixed;
@@ -11,12 +13,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-wrap: wrap;
             height: 100vh;
             font-family: Arial, sans-serif;
-            flex-wrap: wrap;
         }
 
-        .content-container, .tips-container {
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .content-container, .tips-container, .history-container {
             background: rgba(247, 187, 233, 0.7);
             backdrop-filter: blur(10px);
             padding: 30px;
@@ -24,7 +33,8 @@
             box-shadow: 0 4px 10px rgba(147, 106, 106, 0.1);
             text-align: center;
             width: 350px;
-            margin: 10px;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
         input, button {
@@ -49,101 +59,162 @@
             background: rgba(255, 255, 255, 1);
         }
 
+        .tips-container {
+            overflow-y: auto;
+            max-height: 200px;
+        }
+
         .tips-container ul {
-            text-align: left;
-            padding-left: 20px;
+            list-style: none;
+            padding: 0;
         }
 
         .tips-container li {
             margin-bottom: 5px;
         }
+
+        .bmi-image {
+            width: 60px;
+            height: 60px;
+            display: none;
+            margin: 10px auto;
+        }
+
+        .history-container {
+            display: none;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .chart-container {
+            width: 350px;
+            height: 200px;
+            margin: 20px auto;
+        }
     </style>
 </head>
 <body>
 
-    <div class="content-container">
-        <h2>Growth Prediction</h2>
-        <label for="height">Height (cm):</label>
-        <input type="number" id="height" placeholder="Enter height">
-        
-        <label for="weight">Weight (kg):</label>
-        <input type="number" id="weight" placeholder="Enter weight">
-        
-        <button id="predict-btn">Predict Growth</button>
-        <p id="result"></p>
-    </div>
+    <div class="container">
+        <div class="content-container">
+            <h2>Growth Prediction</h2>
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" placeholder="Enter height">
+            
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" placeholder="Enter weight">
+            
+            <button id="predict-btn">Predict Growth</button>
+            <p id="result"></p>
+            <img id="bmi-icon" class="bmi-image" src="" alt="">
 
-    <div class="tips-container">
-        <h3>Nutrition Tips</h3>
-        <ul id="tips-list">
-            <li id="tip1"></li>
-            <li id="tip2"></li>
-            <li id="tip3"></li>
-            <li id="tip4"></li>
-        </ul>
+            <button id="download-btn">Download Report</button>
+        </div>
+
+        <div class="tips-container">
+            <h3>Nutrition Tips</h3>
+            <ul id="tips-list"></ul>
+            <button id="speak-btn">🔊 Hear Tips</button>
+        </div>
+
+        <div class="history-container">
+            <h3>BMI History</h3>
+            <ul id="history-list"></ul>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="bmiChart"></canvas>
+        </div>
     </div>
 
     <script>
+    let bmiHistory = [];
+
     document.getElementById("predict-btn").addEventListener("click", function() {
         let height = document.getElementById("height").value;
         let weight = document.getElementById("weight").value;
         let resultText = document.getElementById("result");
+        let bmiIcon = document.getElementById("bmi-icon");
 
         if (!height || !weight) {
             resultText.innerText = "Please enter both height and weight!";
             resultText.style.color = "red";
+            bmiIcon.style.display = "none";
             return;
         }
 
         let bmi = (weight / ((height / 100) ** 2)).toFixed(2);
+        bmiHistory.push(parseFloat(bmi));
+        updateChart();
+        updateHistory();
 
-        fetch("http://localhost:5000/store-growth", {
+        fetch("http://localhost:5000/predict-growth", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ height, weight, bmi })
+            body: JSON.stringify({ height, weight })
         })
         .then(response => response.json())
         .then(data => {
-            console.log("Response from store-growth:", data);
-            fetch("http://localhost:5000/predict-growth", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ height, weight })
-            })
-            .then(response => response.json())
-            .then(data => {
-                resultText.innerText = `Predicted Growth Status: ${data.prediction} (BMI: ${bmi})`;
-                resultText.style.color = "blue";
-                updateNutritionTips(bmi);
-            })
-            .catch(error => console.error("Error fetching prediction:", error));
+            resultText.innerText = `Predicted Growth Status: ${data.prediction} (BMI: ${bmi})`;
+            resultText.style.color = "blue";
+            updateNutritionTips(bmi);
         })
-        .catch(error => console.error("Error storing data:", error));
+        .catch(error => console.error("Error fetching prediction:", error));
     });
 
     function updateNutritionTips(bmi) {
-        let tip1 = document.getElementById("tip1");
-        let tip2 = document.getElementById("tip2");
-        let tip3 = document.getElementById("tip3");
-        let tip4 = document.getElementById("tip4");
+        let tipsList = document.getElementById("tips-list");
+        tipsList.innerHTML = "";
 
+        let tips = [];
         if (bmi < 18.5) {
-            tip1.innerText = "Eat more protein-rich foods like eggs, nuts, and dairy.";
-            tip2.innerText = "Increase calorie intake with healthy fats and carbs.";
-            tip3.innerText = "Consume dairy products for calcium and growth.";
-            tip4.innerText = "Exercise regularly to build muscle mass.";
+            tips = ["Eat more protein-rich foods.", "Increase calorie intake.", "Drink milk for calcium.", "Exercise to build muscle."];
         } else if (bmi >= 18.5 && bmi < 24.9) {
-            tip1.innerText = "Maintain a balanced diet with proteins, carbs, and fats.";
-            tip2.innerText = "Eat plenty of fruits and vegetables for vitamins.";
-            tip3.innerText = "Stay hydrated and drink enough water daily.";
-            tip4.innerText = "Continue regular physical activity and healthy habits.";
-        } else if (bmi >= 25) {
-            tip1.innerText = "Reduce processed and high-sugar foods.";
-            tip2.innerText = "Increase fiber intake with whole grains and vegetables.";
-            tip3.innerText = "Engage in regular physical activity like walking or yoga.";
-            tip4.innerText = "Control portion sizes and avoid overeating.";
+            tips = ["Maintain a balanced diet.", "Eat fruits and veggies.", "Stay hydrated.", "Exercise regularly."];
+        } else {
+            tips = ["Reduce processed foods.", "Eat more fiber.", "Engage in physical activity.", "Control portion sizes."];
         }
+
+        tips.forEach(tip => {
+            let li = document.createElement("li");
+            li.innerText = tip;
+            tipsList.appendChild(li);
+        });
+
+        document.getElementById("speak-btn").addEventListener("click", () => {
+            let speech = new SpeechSynthesisUtterance(tips.join(". "));
+            window.speechSynthesis.speak(speech);
+        });
     }
+
+    function updateHistory() {
+        let historyList = document.getElementById("history-list");
+        historyList.innerHTML = "";
+        bmiHistory.forEach((bmi, index) => {
+            let li = document.createElement("li");
+            li.innerText = `Entry ${index + 1}: BMI ${bmi}`;
+            historyList.appendChild(li);
+        });
+        document.querySelector(".history-container").style.display = "block";
+    }
+
+    function updateChart() {
+        let ctx = document.getElementById("bmiChart").getContext("2d");
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: bmiHistory.map((_, i) => i + 1),
+                datasets: [{ label: 'BMI Progress', data: bmiHistory, borderColor: 'blue' }]
+            }
+        });
+    }
+
+    document.getElementById("download-btn").addEventListener("click", () => {
+        let doc = new jsPDF();
+        doc.text("Growth Monitoring Report", 10, 10);
+        doc.save("Growth_Report.pdf");
+    });
+
     </script>
 
 </body>
