@@ -7,185 +7,135 @@
     <style>
         /* General Styling */
         body {
-    font-family: 'Poppins', sans-serif;
-    background: url('https://media.istockphoto.com/id/1050248898/photo/abstract-art-of-pastel-watercolor-on-sketch-paper-texture-for-background-design-element-as.jpg?s=612x612&w=0&k=20&c=Cor-i1kbUZAcRz4klpVi4TnpJ8iiwNTxC0zXVGUyIq4=') no-repeat center center fixed;
-    background-size: cover;
-    text-align: center;
-    padding-bottom: 60px;
-}
+            font-family: 'Poppins', sans-serif;
+            background: url('https://media.istockphoto.com/id/1050248898/photo/abstract-art-of-pastel-watercolor-on-sketch-paper-texture-for-background-design-element-as.jpg?s=612x612&w=0&k=20&c=Cor-i1kbUZAcRz4klpVi4TnpJ8iiwNTxC0zXVGUyIq4=') no-repeat center center fixed;
+            background-size: cover;
+            text-align: center;
+            padding-bottom: 60px;
+        }
 
-/* Title Styling */
-h1 {
-    color: #fff;
-    font-size: 32px;
-    font-weight: bold;
-    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
-}
+        /* Title Styling */
+        h1 {
+            color: #fff;
+            font-size: 32px;
+            font-weight: bold;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+        }
 
-/* Carousel Container */
-.carousel-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 30px;
-}
+        /* Carousel Container */
+        .carousel-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px;
+        }
 
-/* Glassmorphism Effect */
-.carousel {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 400px; /* Bigger size */
-    height: 450px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(12px);
-    padding: 20px;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
+        /* Glassmorphism Effect */
+        .carousel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 400px;
+            height: 450px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(12px);
+            padding: 20px;
+        }
 
-.carousel:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-}
+        /* Image Styling */
+        #imageContainer img {
+            width: 350px;
+            height: 350px;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
+        }
 
-/* Image Styling */
-#imageContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
+        /* Buttons */
+        button {
+            background: rgba(105, 137, 202, 0.8);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            cursor: pointer;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease-in-out;
+            backdrop-filter: blur(6px);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 10px;
+        }
 
-#imageContainer img {
-    width: 350px; /* Bigger size */
-    height: 350px;
-    border-radius: 20px;
-    object-fit: cover;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
-    transition: transform 0.3s ease-in-out;
-}
+        button:hover {
+            background: rgba(214, 51, 132, 0.9);
+            transform: scale(1.12);
+        }
 
-#imageContainer img:hover {
-    transform: scale(1.08);
-}
+        /* Notification */
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 18px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
 
-/* Child Details */
-.child-details {
-    margin-top: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #fff;
-    background: rgba(214, 51, 132, 0.8);
-    padding: 8px 16px;
-    border-radius: 10px;
-    display: inline-block;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-}
+        /* Present & Absent List - Horizontal */
+        #presentList, #absentList {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto; /* Enables horizontal scrolling */
+            padding: 10px;
+            margin-top: 20px;
+            gap: 20px; /* Space between child cards */
+        }
 
-/* Button Container - Horizontal */
-.button-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 15px;
-}
+        /* Child Card */
+        .child-card {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            width: 200px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            transition: transform 0.3s ease-in-out;
+        }
 
-/* Button Styling */
-/* Button Container - Horizontal Layout */
-.button-container {
-    display: flex;
-    justify-content: center; /* Centering buttons */
-    gap: 30px; /* Space between buttons */
-    margin-top: 15px;
-    flex-wrap: wrap; /* Ensures buttons wrap if needed */
-}
+        .child-card:hover {
+            transform: scale(1.1);
+        }
 
-/* Button Styling */
-button {
-    background: rgba(105, 137, 202, 0.8);
-    color: white;
-    border: none;
-    padding: 14px 25px;
-    cursor: pointer;
-    border-radius: 12px;
-    font-size: 18px;
-    font-weight: bold;
-    transition: all 0.3s ease-in-out;
-    backdrop-filter: blur(6px);
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    display: inline-block;
-}
+        /* Child Image */
+        .child-card img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease-in-out;
+        }
 
-button:hover {
-    background: rgba(214, 51, 132, 0.9);
-    transform: scale(1.12);
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-
-/* Present & Absent List - Horizontal */
-#presentList, #absentList {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding: 10px;
-    margin-top: 20px;
-    gap: 20px;
-}
-
-/* Child Card */
-.child-card {
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 15px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    width: 200px;
-    text-align: center;
-    backdrop-filter: blur(12px);
-    transition: transform 0.3s ease-in-out;
-}
-
-.child-card:hover {
-    transform: scale(1.1);
-}
-
-/* Child Image */
-.child-card img {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease-in-out;
-}
-
-.child-card img:hover {
-    transform: scale(1.1);
-}
-
-/* Scrollbar Styling */
-#presentList::-webkit-scrollbar,
-#absentList::-webkit-scrollbar {
-    height: 8px;
-}
-
-#presentList::-webkit-scrollbar-thumb,
-#absentList::-webkit-scrollbar-thumb {
-    background: rgba(214, 51, 132, 0.8);
-    border-radius: 10px;
-}
-
-#presentList::-webkit-scrollbar-thumb:hover,
-#absentList::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 105, 180, 1);
-}
-
+        .child-card img:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
     <h1>Attendance Marking System</h1>
+
+    <div id="notification" class="notification"></div>
+
     <div class="carousel-container">
         <button id="prevBtn">&#10094;</button>
         <div class="carousel">
@@ -193,7 +143,7 @@ button:hover {
         </div>
         <button id="nextBtn">&#10095;</button>
     </div>
-    
+
     <h2>Present List</h2>
     <div id="presentList"></div>
 
@@ -202,10 +152,9 @@ button:hover {
 
     <script>
         const images = [
-    { id: 1, name: "John", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtLZs1Q8tDiMlf0bx03pRzTKpz8ekwap9m7A&s" },
-    { id: 2, name: "Joe", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4CpRFl_o1Ze3m4V6cbYTr763tPBP47LDUHw&s" },
-    { id: 3, name: "Grey", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSkg4GTTqmrEhQTDUqj6QW2BoqNBOUxHmWhg&s" },
-    { id: 4, name: "Emma", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhdNYszWqNSoUjNwQ3RVGpJq-IA8HVEcXDbw&s" },
+            { id: 1, name: "John", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtLZs1Q8tDiMlf0bx03pRzTKpz8ekwap9m7A&s" },
+            { id: 2, name: "Emma", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhdNYszWqNSoUjNwQ3RVGpJq-IA8HVEcXDbw&s" },
+            { id: 4, name: "Emma", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhdNYszWqNSoUjNwQ3RVGpJq-IA8HVEcXDbw&s" },
     { id: 5, name: "Noah", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJdCCltvH_TAjByrcuDKHLs2PGiVPOgnnq5A&s" },
     { id: 6, name: "Ava", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoEV8gtK1h08xWMdSiIJ_Cbv8n_yfLT7WsFA&s" },
     { id: 7, name: "Liam", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1-PLT11JwQ24jXtRfbwG9BIdR9HDrvHsDAg&s" },
@@ -222,54 +171,61 @@ button:hover {
     { id: 18, name: "James", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkFfliQuXn6CehPhxS_sov5ReaHqMm9m2PPw&s" },
     { id: 19, name: "Amelia", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2SLUjT9AbxI42cAgewhr1m2_3C1-mM9nHVw&s" },
     { id: 20, name: "Benjamin", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxJ4Gis4iO7EW2WFitJMTJW9ICaiJOjV4pqg&s" }
-];
+   
+        ];
 
-let currentIndex = 0;
-const imageContainer = document.getElementById("imageContainer");
-const presentList = document.getElementById("presentList");
-const absentList = document.getElementById("absentList");
+        let currentIndex = 0;
+        const imageContainer = document.getElementById("imageContainer");
+        const presentList = document.getElementById("presentList");
+        const absentList = document.getElementById("absentList");
+        const notification = document.getElementById("notification");
 
-function showImage(index) {
-    imageContainer.innerHTML = `
-        <img src="${images[index].src}" alt="${images[index].name}">
-        <h3>${images[index].name}</h3>
-        <button onclick="markAttendance(${index}, 'Present')">Present</button>
-        <button onclick="markAttendance(${index}, 'Absent')">Absent</button>
-    `;
-}
+        let attendanceMarked = new Set(); // To store IDs of marked children
 
-function markAttendance(index, status) {
-    const child = images[index];
+        function showNotification(message) {
+            notification.innerText = message;
+            notification.style.display = "block";
+            setTimeout(() => {
+                notification.style.display = "none";
+            }, 2000);
+        }
 
-    fetch("/mark-attendance", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: child.id, name: child.name, status, image: child.src })
-    });
+        function showImage(index) {
+            const child = images[index];
+            imageContainer.innerHTML = `
+                <img src="${child.src}" alt="${child.name}">
+                <h3>${child.name}</h3>
+                <button onclick="markAttendance(${index}, 'Present')">Present</button>
+                <button onclick="markAttendance(${index}, 'Absent')">Absent</button>
+            `;
+        }
 
-    const card = document.createElement("div");
-    card.classList.add("child-card");
-    card.innerHTML = `<img src="${child.src}"><p>${child.name}</p>`;
+        function markAttendance(index, status) {
+            const child = images[index];
 
-    if (status === "Present") {
-        presentList.appendChild(card);
-    } else {
-        absentList.appendChild(card);
-    }
-}
+            if (attendanceMarked.has(child.id)) {
+                showNotification(`Attendance already marked for ${child.name}`);
+                return;
+            }
 
-document.getElementById("prevBtn").addEventListener("click", () => {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    showImage(currentIndex);
-});
+            attendanceMarked.add(child.id);
 
-document.getElementById("nextBtn").addEventListener("click", () => {
-    currentIndex = (currentIndex + 1) % images.length;
-    showImage(currentIndex);
-});
+            const card = document.createElement("div");
+            card.classList.add("child-card");
+            card.innerHTML = `<img src="${child.src}" alt="${child.name}"><p>${child.name}</p>`;
 
-showImage(currentIndex);
+            (status === "Present" ? presentList : absentList).appendChild(card);
+            showNotification(`${child.name} marked as ${status}`);
 
+            if (currentIndex < images.length - 1) {
+                currentIndex++;
+                showImage(currentIndex);
+            } else {
+                showNotification("Attendance Process Complete!");
+            }
+        }
+
+        showImage(currentIndex);
     </script>
 </body>
 </html>

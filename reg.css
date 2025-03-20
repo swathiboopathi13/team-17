@@ -4,53 +4,95 @@ body {
     background-size: cover;
     text-align: center;
     padding-bottom: 60px;
+    color: #333;
 }
 
+/* Buttons */
 .buttons {
     margin: 20px;
 }
+button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+button img {
+    width: 24px;
+    height: 24px;
+}
+
 
 button {
-    padding: 10px 20px;
-    margin: 5px;
+    padding: 12px 24px;
+    margin: 10px;
     border: none;
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
-    color: black;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 10px;
-    transition: 0.3s;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 192, 203, 0.4));
+    backdrop-filter: blur(12px);
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
-    background: rgba(255, 255, 255, 0.5);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 182, 193, 0.6));
+    transform: scale(1.05);
 }
 
+/* Forms and Containers */
 .form-container, .view-container {
     width: 50%;
     margin: auto;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(15px);
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    margin-top: 20px;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    margin-top: 30px;
+    transition: all 0.3s ease-in-out;
 }
 
+.form-container:hover, .view-container:hover {
+    transform: scale(1.02);
+}
+
+/* Input Fields */
 input, select, textarea {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 10px;
+    padding: 12px;
+    margin: 12px 0;
+    border: 2px solid rgba(255, 192, 203, 0.5);
+    border-radius: 12px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(5px);
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
 }
 
+input:focus, select:focus, textarea:focus {
+    border-color: rgba(255, 182, 193, 0.8);
+    background: rgba(255, 255, 255, 0.6);
+}
+
+/* Child Card */
 .child-card {
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
-    margin: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 18px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 192, 203, 0.3));
+    backdrop-filter: blur(12px);
+    margin: 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+}
+
+.child-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
